@@ -1,0 +1,14 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 1;
+  font-size: 13px;
+}
+
+.card-dimension {
+  margin-bottom: 10px;
+  height: 100px;
+}
+
+.list-delete-icon {
+  top: -15px;
+}

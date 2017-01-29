@@ -1,0 +1,152 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <!-- START: CSS -->
+
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="assets/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+
+    <!-- Application -->
+    <link rel="stylesheet" href="assets/css/todo.css">
+
+    <!-- Utility -->
+    <link rel="stylesheet" href="assets/css/general.css">
+    
+    <!-- END: CSS -->
+
+    <!-- START: JS -->
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="assets/lib/jquery-3.1.1.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="assets/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+    <!-- JQuery UI -->
+    <script type="text/javascript" src="assets/lib/jquery-ui.min.js"></script>
+
+    <!-- AngularJS -->
+    <script type="text/javascript" src="assets/lib/angular.min.js"></script>
+
+    <!-- UnderscoreJS -->
+    <script type="text/javascript" src="assets/lib/underscore-min.js"></script>
+
+    <!-- Sortable -->
+    <script type="text/javascript" src="assets/lib/sortable.js"></script>
+
+    <!-- Application -->
+    <script type="text/javascript" src="app/App.js"></script>
+    <script type="text/javascript" src="app/todo/controllers/ToDoListController.js"></script>
+    <script type="text/javascript" src="app/todo/services/ToDoListService.js"></script>
+    <script type="text/javascript" src="app/common/services/UtilService.js"></script>
+
+    <!-- END: JS -->
+  </head>
+  <body ng-app="todoApp" ng-controller="ToDoListController as toDoCtrl">
+
+    <!-- START: ToDo Board -->
+    <div class="panel panel-info">
+
+      <!-- START: Board Title -->
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Todo Board
+        </h3>
+      </div>
+      <!-- END: Board Title -->
+
+      <!-- START: Board Content -->
+      <div class="panel-body">
+
+        <!-- START: List -->
+        <div class="panel panel-default col-lg-3 col-md-3 p-r-0 p-l-0 m-r-20"
+          ng-repeat="list in toDoCtrl.listItems track by list.listId">
+
+          <!-- START: List Title -->
+          <div class="panel-heading">
+            <h3 class="panel-title" ng-bind="list.title">
+            </h3>
+            <span class="glyphicon glyphicon-remove pull-right list-delete-icon" 
+              ng-click="toDoCtrl.deleteList(list.listId)">
+            </span>
+          </div>
+          <!-- END: List Title -->
+
+          <!-- START: List Content -->
+          <div class="panel-body">
+
+            <!-- START: Card -->
+            <ul class="list-group m-b-0" ui-sortable>
+              <li class="list-group-item card-dimension" 
+                ng-repeat="card in list.cards track by card.cardId">
+                <span ng-bind="card.title" ng-click="toDoCtrl.showDialog($event, list.listId, card.cardId)">
+                </span>
+                <span class="glyphicon glyphicon-remove pull-right" ng-click="toDoCtrl.deleteCard(list.listId, card.cardId)">
+                </span>
+              </li>
+              <li class="list-group-item border-none" ng-click="toDoCtrl.showDialog($event, list.listId)">
+                Add new card
+              </li>
+            </ul>
+            <!-- END: Card -->
+
+          </div>
+          <!-- END: List Content -->
+
+        </div>
+        <div class="panel panel-default col-lg-3 col-md-3 p-r-0 p-l-0 m-r-20">
+          <div class="panel-body">
+            <ul class="list-group m-b-0">
+              <li class="list-group-item border-none" ng-click="toDoCtrl.addList()">
+                Add new List
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- END: List -->
+
+      </div>
+      <!-- END: Board Content -->
+      
+      <!-- START: Modal Card -->
+      <div class="modal fade" tabindex="-1" role="dialog" id="card">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+              <form name="card-form"> 
+                <label>Card Title</label> 
+                <input ng-model="toDoCtrl.selectedCard.title" maxlength="20"> 
+                <label>Description</label> 
+                <input md-maxlength="30" ng-model="toDoCtrl.selectedCard.description" maxlength="30"/>  
+                <label>Comment</label> 
+                <input md-maxlength="30" ng-model="comment" maxlength="30"/> 
+                <div ng-repeat="comment in toDoCtrl.selectedCard.comments"> 
+                  <div>{{comment.title}}</div> 
+                  <div>{{comment.created_at | date:'medium'}}</div> 
+                </div> 
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" 
+                ng-click="toDoCtrl.updateCard()">Update</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END: Modal Card -->
+
+    </div>
+    <!-- END: ToDo Board -->
+
+  </body>
+</html>
