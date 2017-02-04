@@ -42,6 +42,7 @@
     <script type="text/javascript" src="app/todo/controllers/ToDoListController.js"></script>
     <script type="text/javascript" src="app/todo/services/ToDoListService.js"></script>
     <script type="text/javascript" src="app/common/services/UtilService.js"></script>
+    <script type="text/javascript" src="app/common/services/StorageService.js"></script>
 
     <!-- END: JS -->
   </head>
@@ -59,11 +60,11 @@
       <!-- END: Board Title -->
 
       <!-- START: Board Content -->
-      <div class="panel-body">
+      <div class="panel-body" ui-sortable>
 
         <!-- START: List -->
         <div class="panel panel-default col-lg-3 col-md-3 p-r-0 p-l-0 m-r-20"
-          ng-repeat="list in toDoCtrl.listItems track by list.listId">
+          ng-repeat="list in listItems track by list.listId">
 
           <!-- START: List Title -->
           <div class="panel-heading">

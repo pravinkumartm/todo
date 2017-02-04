@@ -22,8 +22,10 @@
     
     vm.init = function() {
       vm.selectedList = {};
-      vm.listItems = ToDoListService.listItems;
-      vm.staticListId = vm.listItems.length;
+      ToDoListService.initializeData(function() {
+        $scope.listItems = ToDoListService.listItems;
+        vm.staticListId = $scope.listItems.length;
+      });
     }();
 
     vm.showDialog = function(ev, listId, cardId) {
@@ -35,7 +37,7 @@
     };
 
     function getListById(listId) {
-      return _.filter(vm.listItems, function(item) {
+      return _.filter($scope.listItems, function(item) {
         return item.listId === listId;
       })[0];
     }
@@ -59,7 +61,7 @@
 
     vm.updateCard = function() {
       var cardObj = vm.selectedCard;
-      vm.listItems.map(function(list) {
+      $scope.listItems.map(function(list) {
         if(list.listId === vm.selectedList.listId) {
           if (vm.selectedCard.cardId) {
             list.cards.map(function(card) {
@@ -85,7 +87,7 @@
     };
 
     vm.deleteCard = function(listId, cardId) {
-      vm.listItems.map(function(list) {
+      $scope.listItems.map(function(list) {
         if(list.listId === listId) {
           var removeCardIndex;
           _.each(list.cards, function(card, index) {
@@ -110,7 +112,7 @@
         }
         cardObj.comments.push(commentObj) 
       }
-      vm.listItems.map(function(list) {
+      $scope.listItems.map(function(list) {
         if(list.listId === listId) {
           list.cards.push(cardObj);
         }
@@ -126,22 +128,26 @@
           title: title,
           cards: []
       }
-      vm.listItems.push(listObj);
+      $scope.listItems.push(listObj);
     };
 
     vm.deleteList = function(listId) {
       var removeIndex;
-      _.each(vm.listItems, function(list, index) {
+      _.each($scope.listItems, function(list, index) {
         if(list.listId === listId) {
           removeIndex = index;
         }
       });
-      vm.listItems.splice(removeIndex, 1);
+      $scope.listItems.splice(removeIndex, 1);
 
-      if(vm.listItems.length <= 0) {
+      if($scope.listItems.length <= 0) {
         vm.staticListId = 0;
       }
     };
+
+    $scope.$watch('listItems', function (newValue, oldValue, scope) {
+        ToDoListService.saveAppData(newValue);
+    }, true);
 
   }
 
